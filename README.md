@@ -13,7 +13,6 @@ Before getting started, make sure you have the following software installed on y
 
 - Randomly connect users for real-time chat sessions
 - Send and receive messages instantly
-- User authentication and authorization
 - Chat history persistence
 - User-friendly interface
 
@@ -26,3 +25,18 @@ Before getting started, make sure you have the following software installed on y
 
 ## Contributing
 Contributions are welcome! If you have any suggestions or improvements, please create a pull request.
+
+
+### NOTES
+MongoDB database format:
+There should exist 2 collections - One for chatmessages of all the users and the other should be specific to each user  \[temporary\]
+
+Collection 1: User
+User: <name>
+Chats:{}
+Some more user data
+
+Collection 2: Chatroom
+Chatroom_name:
+Users:
+Last message Time:
