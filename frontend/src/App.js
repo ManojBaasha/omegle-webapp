@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
 
-function App() {
+import Home from "./components/HomeScreen";
+import Login from "./components/LoginScreen";
+import Chat from "./components/ChatScreen";
+import Settings from "./components/SettingsScreen";
+import Test from "./components/TestScreen";
+import Loading from "./components/LoadingScreen";
+import NavBar from "./components/NavBar";
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+} from "react-router-dom";
+
+function App(props) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <NavBar />
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/login" element={<Login/>} />
+          <Route path="/chat" element={<Chat/>} />
+          <Route path="/settings" element={<Settings/>} />
+          <Route path="/test" element={<Test/>} />
+          <Route path="/loading" element={<Loading/>} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
