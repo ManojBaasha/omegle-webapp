@@ -72,13 +72,29 @@ io.on("connection", (socket) => {
         const result = await user_collection.findOne(findUserQuery);
         // console.log("Username : ",result.username );
         socket.emit("userdata", result.username);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
     }
     fetchuserdata();
-    
+  });
+
+  socket.on("adduserdata", (id, username) => {
+    async function createusername() {
+      //create a new user with data in the user_collection
+      const newUser = {
+        _id: id,
+        username: username,
+      };
+      console.log("New User: ", newUser);
+      try {
+        const result = await user_collection.insertOne(newUser);
+        console.log("New User Created: ", result);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    createusername();
   });
 });
 

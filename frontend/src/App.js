@@ -27,12 +27,12 @@ function App(props) {
               {/* We are protecting our Home Page from unauthenticated */}
               {/* users by wrapping it with PrivateRoute here. */}
               <Route exact path="/" element={<Home />} />
+              <Route path="/chat" element={<Chat />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/test" element={<Test />} />
+              <Route path="/loading" element={<Loading />} />
             </Route>
             <Route path="/login" element={<Login />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/test" element={<Test />} />
-            <Route path="/loading" element={<Loading />} />
             <Route path="/register" element={<Register />} />
           </Routes>
         </UserProvider>

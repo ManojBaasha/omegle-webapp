@@ -2,6 +2,10 @@ import { createContext, useState } from "react";
 import { App, Credentials } from "realm-web";
 import { APP_ID } from "../realm/constants";
 
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:3001");
+
 // Creating a Realm App Instance
 const app = new App(APP_ID);
 
@@ -21,12 +25,24 @@ export const UserProvider = ({ children }) => {
   };
 
   // Function to signup user into our Realm using their email & password
-  const emailPasswordSignup = async (email, password) => {
+  const emailPasswordSignup = async (email, password, username) => {
     try {
-      await app.emailPasswordAuth.registerUser(email, password);
+      // let email_add = string(email);
+      // let password_add = string(password);
+      await app.emailPasswordAuth.registerUser({ email, password });
+
       // Since we are automatically confirming our users we are going to login
       // the user using the same credentials once the signup is complete.
-      return emailPasswordLogin(email, password);
+      const credentials = Credentials.emailPassword(email, password);
+      const authedUser = await app.logIn(credentials);
+      setUser(authedUser);
+      let id = app.currentUser.id;
+      console.log(id, username);
+      socket.emit("adduserdata", id, username );
+      // unset user 
+      setUser(null);
+      emailPasswordLogin(email, password);
+      return authedUser;  
     } catch (error) {
       throw error;
     }
