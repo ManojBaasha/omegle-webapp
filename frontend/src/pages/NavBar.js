@@ -12,6 +12,7 @@ function NavBar() {
         <li><Link to="/settings">Settings</Link></li>
         <li><Link to="/test">Test</Link></li>
         <li><Link to="/loading">Loading</Link></li>
+        <li><Link to="/register">Register</Link></li>
       </ul>
     </nav>
   );
