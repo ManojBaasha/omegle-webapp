@@ -1,8 +1,25 @@
-const app = require("express")();
-const http = require("http").Server(app);
-const io = require("socket.io")(http);
-const port = process.env.PORT || 3000;
+/////////////////////////////////////////////////
+// Socket.io
 
+const express = require("express");
+const app = express();
+const http = require("http");
+const { Server } = require("socket.io");
+const cors = require("cors");
+
+app.use(cors());
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+/////////////////////////////////////////////////
+// Realm App ID and MongoDB Realm API Key
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const path = require("path");
 const envPath = path.resolve(__dirname, "../.env");
@@ -20,37 +37,51 @@ const client = new MongoClient(uri, {
   },
 });
 
-function add_message_to_mongodb(chatroomID, sender, message) {
-  client.connect();
-  client.db("admin").command({ ping: 1 });
-  console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  const dbName = "chat";
-  const collectionName = "Chatrooms";
+// The connect() method does not attempt a connection; instead it instructs
+// the driver to connect using the settings provided when a connection
+// is required.
+client.connect();
 
-  const database = client.db(dbName);
-  const collection = database.collection(collectionName);
+// Provide the name of the database and collection you want to use.
+// If the database and/or collection do not exist, the driver and Atlas
+// will create them automatically when you first write data.
+const dbName = "chat";
 
-  const timestamp_now = new Date();
+// Create references to the database and collection in order to run
+// operations on them.
+const database = client.db(dbName);
+const user_collection = database.collection("user_collection");
 
-  const findQuery = { chatroomID: chatroomID };
-  let chatroom = "";
+/////////////////////////////////////////////////
 
-  try {
-    const cursor = collection.find(findQuery).sort({ chatroomID: 1 });
-    //   console.log(cursor);
-    cursor.forEach((chats) => {
-      console.log(
-        `Chatroom ID ${chats.chatroomID} with ${chats.User1} and ${chats.User2}`
-      );
-      chatroom = chats.chatroomID;
-    });
-    // add a linebreak
-    console.log();
-  } catch (err) {
-    console.error(
-      `Something went wrong trying to find the documents: ${err}\n`
-    );
-  }
-}
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
 
-add_message_to_mongodb("1", "elotes", "hello");
+  // socket.on("join_room", (data) => {
+  //   socket.join(data);
+  // });
+
+  // socket.on("send_message", (data) => {
+  //   socket.to(data.room).emit("receive_message", data);
+  // });
+
+  socket.on("fetchuserdata", (data) => {
+    async function fetchuserdata() {
+      const findUserQuery = { _id: data };
+      try {
+        const result = await user_collection.findOne(findUserQuery);
+        // console.log("Username : ",result.username );
+        socket.emit("userdata", result.username);
+      }
+      catch (error) {
+        console.log(error);
+      }
+    }
+    fetchuserdata();
+    
+  });
+});
+
+server.listen(3001, () => {
+  console.log("SERVER IS RUNNING");
+});

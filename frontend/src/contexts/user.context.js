@@ -59,6 +59,17 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  //function to fetch custom data from user
+  const fetchCustomData = async () => {
+    if (!app.currentUser) return false;
+    try {
+      //return user data
+      return app.currentUser.id;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -68,6 +79,7 @@ export const UserProvider = ({ children }) => {
         emailPasswordLogin,
         emailPasswordSignup,
         logOutUser,
+        fetchCustomData,
       }}
     >
       {children}
