@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/omegle-webapp/static/css/main.3b29f458.css",
+    "main.js": "/omegle-webapp/static/js/main.c08b2b63.js",
+    "static/js/787.cda612ba.chunk.js": "/omegle-webapp/static/js/787.cda612ba.chunk.js",
+    "index.html": "/omegle-webapp/index.html",
+    "main.3b29f458.css.map": "/omegle-webapp/static/css/main.3b29f458.css.map",
+    "main.c08b2b63.js.map": "/omegle-webapp/static/js/main.c08b2b63.js.map",
+    "787.cda612ba.chunk.js.map": "/omegle-webapp/static/js/787.cda612ba.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3b29f458.css",
+    "static/js/main.c08b2b63.js"
+  ]
+}
