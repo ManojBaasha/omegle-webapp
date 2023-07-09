@@ -22,7 +22,6 @@ export default function Home() {
           // console.log("Username : ", data);
           setUsername(data);
         });
-
         // const customData = await fetchCustomData();
         // console.log("Custom Data: ", customData);
       } catch (error) {

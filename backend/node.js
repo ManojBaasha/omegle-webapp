@@ -7,7 +7,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 
-app.use(cors());
+app.use(cors("http://localhost:3000"));
 
 const server = http.createServer(app);
 
@@ -17,6 +17,12 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+
+const headers = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST,PATCH,OPTIONS",
+};
 
 /////////////////////////////////////////////////
 // Realm App ID and MongoDB Realm API Key
@@ -51,6 +57,7 @@ const dbName = "chat";
 // operations on them.
 const database = client.db(dbName);
 const user_collection = database.collection("user_collection");
+const chat_collection = database.collection("chat_collection");
 
 /////////////////////////////////////////////////
 
@@ -91,10 +98,58 @@ io.on("connection", (socket) => {
         const result = await user_collection.insertOne(newUser);
         console.log("New User Created: ", result);
       } catch (error) {
-        console.log(error);
+        console.log("failed to create new user: ", error);
+      }
+
+      // create a new chat with the user "TheRealManoj" in the chat_collection
+      const newChat = {
+        user1: "TheRealManoj",
+        user2: username,
+        user: "Anonymous Dragon",
+        last_message_sent: "",
+        last_message_time: "",
+        IsMessageRead: true,
+      };
+
+      try {
+        const result = await chat_collection.insertOne(newChat);
+        console.log("New Chat Created: ", result);
+      } catch (error) {
+        console.log("failed to create new chat: ", error);
       }
     }
     createusername();
+  });
+
+  socket.on("fetchchatdata", (data) => {
+    async function fetchchatdata() {
+      //fetch chat data from chat_collection. the data should be either user1 or user2
+      console.log("username from backend : ", data);
+      const findChatQuery = { user2: data };
+      try {
+        let final_chatdata = [];
+        const result = await chat_collection.find(findChatQuery);
+        if (result === null) {
+          console.log(
+            "Couldn't find any chat that contain {user} as the user.\n"
+          );
+        } else {
+          await result.forEach((chatinbox) => {
+            console.log(
+              `${chatinbox.user1} and ${chatinbox.user2} are chatting with ${chatinbox.user}`
+            );
+            //append the chat data to the final_chatdata array
+            final_chatdata.push(chatinbox);
+          });
+          // console.log("chat data : ", result);
+          socket.emit("chatdata", final_chatdata);
+        }
+        // socket.emit("chatdata", result.user);
+      } catch (error) {
+        console.log("failed to fetch chat data: ", error);
+      }
+    }
+    fetchchatdata();
   });
 });
 

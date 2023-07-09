@@ -1,0 +1,50 @@
+/* Styles for the MainBox */
+.MainBox {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  border: green 5px solid;
+}
+
+/* Styles for the LeftBox */
+.LeftBox {
+  width: 30%;
+  border: black 5px red;
+}
+
+/* Styles for the RightBox */
+.RightBox {
+  width: 70%;
+  border: black 5px solid;
+}
+
+/* Styles for the header in the LeftBox */
+.LeftBox h1 {
+  text-align: left;
+}
+
+/* Styles for the Navbar in the RightBox */
+.RightBox nav {
+  background-color: #f2f2f2;
+  padding: 10px;
+}
+
+.RightBox ul {
+  display: flex;
+  list-style-type: none;
+  justify-content: space-between;
+}
+
+.RightBox li {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* Styles for the chat boxes */
+.ChatBox {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+  text-align: left;
+}
