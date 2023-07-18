@@ -6,7 +6,7 @@ import io from "socket.io-client";
 
 const socket = io.connect("http://localhost:3001");
 
-export default function Home() {
+export default function Home({ setIsLoading }) {
   const { logOutUser, fetchCustomData } = useContext(UserContext);
   const [ username, setUsername ] = useState("");
 
@@ -51,6 +51,9 @@ export default function Home() {
       <h1>Welcome to {username}! You have logged in Successfully</h1>
       <Button variant="contained" onClick={logOut}>
         Logout
+      </Button>
+      <Button variant="contained" onClick={() => setIsLoading(true)}>
+        Start Search
       </Button>
     </>
   );

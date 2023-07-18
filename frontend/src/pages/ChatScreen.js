@@ -1,7 +1,12 @@
 import React from "react";
 import "../assets/ChatScreen.css";
+import { Button } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/user.context";
+import bird from "../assets/profilepics/bird.png";
+import Loading from "./LoadingScreen";
+import Test from "./TestScreen";
+import Home from "./HomeScreen";
 
 /* example of conversations array
 0: 
@@ -32,6 +37,15 @@ const socket = io.connect("http://localhost:3001");
 function Chat() {
   const { fetchCustomData } = useContext(UserContext);
   const [conversations, setConversations] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedConversation, setSelectedConversation] = useState(null);
+
+  const handleClick = (conversation) => {
+    // Handle the click event
+    setSelectedConversation(conversation);
+    setIsLoading(false);
+    // Perform any action you want based on the clicked conversation
+  };
 
   useEffect(() => {
     const fetchchatdata = async () => {
@@ -59,30 +73,78 @@ function Chat() {
   return (
     <div className="MainBox">
       <div className="LeftBox">
+        <div className="LeftBoxNav">
         <h1>Header</h1>
-        <div>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick= {() => {
+            setIsLoading(true);
+            setSelectedConversation(null);
+          }}
+          style={{
+            background:
+              "linear-gradient(90deg, rgb(198.69, 82.06, 18.21) 0%, rgb(232.69, 148.14, 21.33) 100%)",
+            borderRadius: "6px",
+            color: "#ffffff",
+            fontFamily: "Inter",
+            fontSize: "20px",
+            fontWeight: "600",
+            letterSpacing: "0",
+            lineHeight: "normal",
+            position: "relative",
+            whiteSpace: "nowrap",
+            height: "60px",
+            marginTop: "1rem",
+            width: "200px",
+          }}
+        >
+          Find Somebody
+        </Button>
+        </div>
+        {/* <div>
           {conversations.map((conversation) => (
-            <div class = "ChatBox">
-            <div key={conversation._id}>
-              <p>User: {conversation.user}</p>
-              <p>User1: {conversation.user1}</p>
-              <p>User2: {conversation.user2}</p>
-              <p>Last Message: {conversation.last_message_sent}</p>
-              <p>Last Message Time: {conversation.last_message_time}</p>
-            </div>
+            <div class="ChatBox">
+              <div key={conversation._id}>
+                <p>User: {conversation.user}</p>
+                <p>User1: {conversation.user1}</p>
+                <p>User2: {conversation.user2}</p>
+                <p>Last Message: {conversation.last_message_sent}</p>
+                <p>Last Message Time: {conversation.last_message_time}</p>
+              </div>
             </div>
           ))}
-        </div>
+        </div> */}
+        {conversations.map((conversation) => (
+          <button
+            className="OuterBox"
+            key={conversation._id}
+            onClick={() => handleClick(conversation)}
+          >
+            <img src={bird} alt="bird" className="profilePic" />
+            <div className="InnerChatBox">
+              <div className="ChatName">{conversation.user}</div>
+              <div className="innerInnerChatBox">
+                <div className="ChatMessage">
+                  {conversation.last_message_sent}
+                </div>
+                <div className="ChatTime">
+                  - {conversation.last_message_time}
+                </div>
+              </div>
+            </div>
+          </button>
+        ))}
       </div>
 
       <div className="RightBox">
-        <nav>
-          <ul>
-            <li>Back</li>
-            <li>Whoever you chatting with</li>
-            <li>Idk button</li>
-          </ul>
-        </nav>
+        {selectedConversation ? (
+          <Test conversation={selectedConversation} />
+        ) : !isLoading ? (
+          <Home setIsLoading={setIsLoading} />
+        ) : (
+          <Loading />
+        )}
       </div>
     </div>
   );

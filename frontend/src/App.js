@@ -1,6 +1,9 @@
 // import logo from "./logo.svg";
 import "./App.css";
 
+import { ThemeProvider, createTheme } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline';
+
 import Home from "./pages/HomeScreen";
 import Login from "./pages/LoginScreen";
 import Chat from "./pages/ChatScreen";
@@ -14,9 +17,17 @@ import { UserProvider } from "./contexts/user.context";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+
 function App(props) {
   return (
     <Router>
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
       <div className="App">
         <NavBar />
         {/* We are wrapping our whole app with UserProvider so that */}
@@ -37,6 +48,7 @@ function App(props) {
           </Routes>
         </UserProvider>
       </div>
+      </ThemeProvider>
     </Router>
   );
 }
