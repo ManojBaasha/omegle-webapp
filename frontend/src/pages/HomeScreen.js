@@ -3,12 +3,15 @@ import { useContext, useEffect } from "react";
 import React, { useState } from 'react';
 import { UserContext } from "../contexts/user.context";
 import io from "socket.io-client";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const socket = io.connect("http://localhost:3001");
 
-export default function Home({ setIsLoading }) {
+export default function Home() {
   const { logOutUser, fetchCustomData } = useContext(UserContext);
   const [ username, setUsername ] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     // console.log("Home Screen");
@@ -46,14 +49,20 @@ export default function Home({ setIsLoading }) {
     }
   };
 
+  // this function is called to redirect to chat screen
+  const sendtochat = () => {
+    const redirectTo = location.search.replace("?redirectTo=", "");
+    navigate(redirectTo ? redirectTo : "/chat");
+  };
+
   return (
     <>
       <h1>Welcome to {username}! You have logged in Successfully</h1>
       <Button variant="contained" onClick={logOut}>
         Logout
       </Button>
-      <Button variant="contained" onClick={() => setIsLoading(true)}>
-        Start Search
+      <Button variant="contained" onClick={sendtochat}>
+        Go to CHats
       </Button>
     </>
   );

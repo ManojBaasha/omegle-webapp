@@ -6,7 +6,7 @@ import { UserContext } from "../contexts/user.context";
 import bird from "../assets/profilepics/bird.png";
 import Loading from "./LoadingScreen";
 import Test from "./TestScreen";
-import Home from "./HomeScreen";
+import Welcome from "./WelcomeScreen";
 
 /* example of conversations array
 0: 
@@ -141,7 +141,7 @@ function Chat() {
         {selectedConversation ? (
           <Test conversation={selectedConversation} />
         ) : !isLoading ? (
-          <Home setIsLoading={setIsLoading} />
+          <Welcome setIsLoading={setIsLoading} />
         ) : (
           <Loading />
         )}
