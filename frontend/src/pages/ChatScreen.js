@@ -31,8 +31,7 @@ length: 2
 */
 
 import io from "socket.io-client";
-
-const socket = io.connect("http://localhost:3001");
+import socket from '../contexts/socket.js';
 
 function Chat() {
   const { fetchCustomData } = useContext(UserContext);
@@ -59,7 +58,7 @@ function Chat() {
           socket.emit("fetchchatdata", data);
 
           socket.on("chatdata", (conversations) => {
-            console.log("Chat data: ", conversations);
+            // console.log("Chat data: ", conversations);
             setConversations(conversations); // set the conversations data
           });
         });

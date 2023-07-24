@@ -5,7 +5,8 @@ import { UserContext } from "../contexts/user.context";
 import io from "socket.io-client";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const socket = io.connect("http://localhost:3001");
+import socket from '../contexts/socket.js';
+
 
 export default function Home() {
   const { logOutUser, fetchCustomData } = useContext(UserContext);

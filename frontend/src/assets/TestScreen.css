@@ -62,6 +62,12 @@
   padding: 8px;
   flex-grow: 100;
   background: #f0f0f0;
+  flex-direction: row;
+}
+
+.message-form form {
+  display: flex;
+  flex-grow: 100;
 }
 
 .message-form input {

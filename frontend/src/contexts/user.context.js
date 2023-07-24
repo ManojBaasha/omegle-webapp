@@ -3,8 +3,7 @@ import { App, Credentials } from "realm-web";
 import { APP_ID } from "../realm/constants";
 
 import io from "socket.io-client";
-
-const socket = io.connect("http://localhost:3001");
+import socket from '../contexts/socket.js';
 
 // Creating a Realm App Instance
 const app = new App(APP_ID);
