@@ -30,7 +30,6 @@ import Welcome from "./WelcomeScreen";
 length: 2
 */
 
-import io from "socket.io-client";
 import socket from '../contexts/socket.js';
 
 function Chat() {
@@ -142,7 +141,7 @@ function Chat() {
         ) : !isLoading ? (
           <Welcome setIsLoading={setIsLoading} />
         ) : (
-          <Loading />
+          <Loading setIsLoading={setIsLoading} setSelectedConversation = {setSelectedConversation} />
         )}
       </div>
     </div>
