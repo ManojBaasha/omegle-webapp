@@ -244,7 +244,6 @@ function pairRandomUsers() {
   }
 }
 
-
 function removeRowByElement(array, element) {
   const rowIndex = array.findIndex((row) => row.includes(element));
 
@@ -262,7 +261,6 @@ function getsocketidfromusername(username, userPooltemp) {
     }
   }
 }
-
 
 // Periodically try to pair users every 5 seconds (adjust the interval as needed)
 setInterval(pairRandomUsers, 5000);
@@ -335,6 +333,15 @@ io.on("connection", (socket) => {
     }
 
     console.log(`User with socket ID ${data} added to the pool.`);
+  });
+
+  socket.on("leavePool", (data) => {
+    if(removeRowByElement(userPool, data)){
+      console.log(`User with socket ID ${data} removed from the pool.`);
+    }else{
+      console.log(`User with socket ID ${data} could not be removed from the pool.`);
+    }
+
   });
 
   // Socket disconnect event
