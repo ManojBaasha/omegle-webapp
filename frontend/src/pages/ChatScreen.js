@@ -40,8 +40,23 @@ function Chat() {
 
   const handleClick = (conversation) => {
     // Handle the click event
-    setSelectedConversation(conversation);
+    const removefrompool = async () => {
+      try {
+        //call the socket.io server
+        socket.emit("fetchuserdata", await fetchCustomData());
+        // Emit an event to add user to the queue
+        socket.on("userdata", (data) => {
+          socket.emit("leavePool", data);
+          console.log("Removed from pool: ", data);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    removefrompool();
+
     setIsLoading(false);
+    setSelectedConversation(conversation);
     // Perform any action you want based on the clicked conversation
   };
 
