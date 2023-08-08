@@ -2,11 +2,13 @@ import React from "react";
 import "../assets/ChatScreen.css";
 import { Button } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/user.context";
 import bird from "../assets/profilepics/bird.png";
 import Loading from "./LoadingScreen";
 import Test from "./TestScreen";
 import Welcome from "./WelcomeScreen";
+import { useParams } from "react-router-dom";
 
 /* example of conversations array
 0: 
@@ -30,20 +32,24 @@ import Welcome from "./WelcomeScreen";
 length: 2
 */
 
-import io from "socket.io-client";
-import socket from '../contexts/socket.js';
+import socket from "../contexts/socket.js";
 
 function Chat() {
   const { fetchCustomData } = useContext(UserContext);
   const [conversations, setConversations] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const navigate = useNavigate();
+  const { conversation_id } = useParams();
 
-  const handleClick = (conversation) => {
+  const handleClick = (conversationid) => {
     // Handle the click event
-    setSelectedConversation(conversation);
-    setIsLoading(false);
+    setSelectedConversation(conversationid);
     // Perform any action you want based on the clicked conversation
+    let navigate_string = "/chat/" + conversationid;
+    //remove spaces in the string
+    navigate_string = navigate_string.replace(/\s/g, "");
+    navigate(navigate_string);
+    // console.log("Clicked conversation: ", conversation._id);
   };
 
   useEffect(() => {
@@ -60,46 +66,68 @@ function Chat() {
           socket.on("chatdata", (conversations) => {
             // console.log("Chat data: ", conversations);
             setConversations(conversations); // set the conversations data
+            // console.log("Chat data: ", conversations);
           });
         });
+        // Clean up the socket listeners when the component unmounts
+        return () => {
+          // Remove the "userdata" listener
+          socket.off("userdata");
+
+          // Remove the "chatdata" listener
+          socket.off("chatdata");
+
+          // Disconnect from the current room ID (if any)
+          if (selectedConversation) {
+            socket.emit("leaveRoom", selectedConversation);
+          }
+        };
       } catch (error) {
-        alert("Error in fetching usernmae", error);
+        alert("Error in fetching username", error);
       }
     };
     fetchchatdata();
   }, []);
 
+  useEffect(() => {
+    if (conversation_id) {
+      setSelectedConversation(conversation_id);
+    }
+  }, [conversation_id]);
+  
+
+
   return (
     <div className="MainBox">
       <div className="LeftBox">
         <div className="LeftBoxNav">
-        <h1>Header</h1>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick= {() => {
-            setIsLoading(true);
-            setSelectedConversation(null);
-          }}
-          style={{
-            background:
-              "linear-gradient(90deg, rgb(198.69, 82.06, 18.21) 0%, rgb(232.69, 148.14, 21.33) 100%)",
-            borderRadius: "6px",
-            color: "#ffffff",
-            fontFamily: "Inter",
-            fontSize: "20px",
-            fontWeight: "600",
-            letterSpacing: "0",
-            lineHeight: "normal",
-            position: "relative",
-            whiteSpace: "nowrap",
-            height: "60px",
-            marginTop: "1rem",
-            width: "200px",
-          }}
-        >
-          Find Somebody
-        </Button>
+          <h1>Header</h1>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setSelectedConversation(null);
+              navigate("/loading");
+            }}
+            style={{
+              background:
+                "linear-gradient(90deg, rgb(198.69, 82.06, 18.21) 0%, rgb(232.69, 148.14, 21.33) 100%)",
+              borderRadius: "6px",
+              color: "#ffffff",
+              fontFamily: "Inter",
+              fontSize: "20px",
+              fontWeight: "600",
+              letterSpacing: "0",
+              lineHeight: "normal",
+              position: "relative",
+              whiteSpace: "nowrap",
+              height: "60px",
+              marginTop: "1rem",
+              width: "200px",
+            }}
+          >
+            Find Somebody
+          </Button>
         </div>
         {/* <div>
           {conversations.map((conversation) => (
@@ -118,7 +146,7 @@ function Chat() {
           <button
             className="OuterBox"
             key={conversation._id}
-            onClick={() => handleClick(conversation)}
+            onClick={() => handleClick(conversation._id)}
           >
             <img src={bird} alt="bird" className="profilePic" />
             <div className="InnerChatBox">
@@ -139,10 +167,8 @@ function Chat() {
       <div className="RightBox">
         {selectedConversation ? (
           <Test conversation={selectedConversation} />
-        ) : !isLoading ? (
-          <Welcome setIsLoading={setIsLoading} />
         ) : (
-          <Loading />
+          <Welcome />
         )}
       </div>
     </div>

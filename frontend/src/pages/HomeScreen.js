@@ -1,16 +1,15 @@
 import { Button } from "@mui/material";
 import { useContext, useEffect } from "react";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { UserContext } from "../contexts/user.context";
 import io from "socket.io-client";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import socket from '../contexts/socket.js';
-
+import socket from "../contexts/socket.js";
 
 export default function Home() {
   const { logOutUser, fetchCustomData } = useContext(UserContext);
-  const [ username, setUsername ] = useState("");
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -33,6 +32,11 @@ export default function Home() {
       }
     };
     printuserdata();
+    // Clean up the socket connection and listeners
+    return () => {
+      socket.disconnect();
+      socket.off("userdata");
+    };
   }, []);
 
   // This function is called when the user clicks the "Logout" button.

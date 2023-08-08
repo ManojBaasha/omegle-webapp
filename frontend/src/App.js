@@ -1,8 +1,8 @@
 // import logo from "./logo.svg";
 import "./App.css";
 
-import { ThemeProvider, createTheme } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 import Home from "./pages/HomeScreen";
 import Login from "./pages/LoginScreen";
@@ -19,35 +19,37 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
   },
 });
 
 function App(props) {
   return (
     <Router>
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <div className="App">
-        <NavBar />
-        {/* We are wrapping our whole app with UserProvider so that */}
-        {/* our user is accessible through out the app from any page*/}
-        <UserProvider>
-          <Routes>
-            <Route element={<PrivateRoute />}>
-              {/* We are protecting our Home Page from unauthenticated */}
-              {/* users by wrapping it with PrivateRoute here. */}
-              <Route exact path="/" element={<Home />} />
-              <Route path="/chat" element={<Chat />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/test" element={<Test />} />
-              <Route path="/loading" element={<Loading />} />
-            </Route>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </UserProvider>
-      </div>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <div className="App">
+          <NavBar />
+          {/* We are wrapping our whole app with UserProvider so that */}
+          {/* our user is accessible through out the app from any page*/}
+          <UserProvider>
+            <Routes>
+              <Route element={<PrivateRoute />}>
+                {/* We are protecting our Home Page from unauthenticated */}
+                {/* users by wrapping it with PrivateRoute here. */}
+                <Route exact path="/" element={<Home />} />
+                <Route path="/chat" element={<Chat />} />
+                <Route path="/settings" element={<Settings />} />
+                {/* <Route path="/test" element={<Test />} /> */}
+                <Route path="/loading" element={<Loading />} />
+                {/* Dynamic route for chat pages */}
+                <Route path="/chat/:conversation_id" element={<Chat />} />
+              </Route>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </UserProvider>
+        </div>
       </ThemeProvider>
     </Router>
   );

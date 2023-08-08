@@ -33,9 +33,10 @@ function Test({ conversation }) {
   const messageRef = useRef(null);
 
   // Store the previous conversation ID in a ref
-  const previousConversationId = useRef(conversation._id);
+  const previousConversationId = useRef(conversation);
 
   useEffect(() => {
+    // console.log("Conversation ID changed:", conversation);
     // Function to fetch chat messages and user data
     const fetchChatmessages = async () => {
       try {
@@ -53,7 +54,7 @@ function Test({ conversation }) {
         });
 
         // Emit an event to request chat messages for a specific conversation
-        socket.emit("fetchchatmessages", conversation._id);
+        socket.emit("fetchchatmessages", conversation);
 
         // Listen for the response from the server containing the chat messages
         socket.on("chatmessages", (data) => {
@@ -86,10 +87,12 @@ function Test({ conversation }) {
     return () => {
       socket.off("newmessage", messageListener);
 
+      socket.off("userdata");
+
       // Disconnect from the current room ID
-      socket.emit("leaveRoom", conversation._id);
+      socket.emit("leaveRoom", conversation);
     };
-  }, [conversation._id]);
+  }, [conversation]);
 
   // Function to handle sending a new message
   const handleMessageSend = (event) => {
@@ -98,7 +101,7 @@ function Test({ conversation }) {
 
     const messageData = {
       content: newMessage,
-      group_id: conversation._id,
+      group_id: conversation,
       timestamp: new Date().getTime(),
       user: sender, // Assuming 'sender' is the username of the current user
     };
@@ -123,7 +126,7 @@ function Test({ conversation }) {
         <div>
           {/* User's profile and name */}
           <img src={bird} alt="Profile" />
-          <span style={{ fontWeight: "bold" }}>{conversation.user}</span>
+          <span style={{ fontWeight: "bold" }}>{conversation}</span>
         </div>
         <button onClick={homescreen}>Back</button>
       </div>
