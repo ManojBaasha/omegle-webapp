@@ -25,9 +25,7 @@ function Loading() {
 
         socket.on("userdata", handleUserData);
 
-        return () => {
-          socket.off("userdata", handleUserData);
-        };
+        return () => {};
       } catch (error) {
         // Handle error appropriately
         console.error("Error fetching data:", error);
@@ -38,25 +36,24 @@ function Loading() {
   }, []);
 
   useEffect(() => {
-    const handlePaired = (conversationid) => {
-      console.log("Paired with user: ", conversationid);
+    const handlePaired = (conversationId) => {
+      console.log("Paired with user: ", conversationId);
 
       socket.emit("stop_loading", username);
 
       // Perform any action you want based on the clicked conversation
-      let navigate_string = "/chat/" + conversationid;
-      //remove spaces in the string
+      let navigate_string = "/chat/" + conversationId;
+      // Remove spaces in the string
       navigate_string = navigate_string.replace(/\s/g, "");
+      console.log("Navigating to: ", navigate_string);
       navigate(navigate_string);
     };
 
-    // Event listener for pairing with another user
-    socket.on("paired", handlePaired);
-
-    return () => {
-      // Clean up event listeners when component unmounts
-      socket.off("paired", handlePaired);
-    };
+    // Event listener for pairing. paired receives the conversation id
+    socket.on("paired", (conversationId) => {
+      handlePaired(conversationId);
+    });
+    return () => {};
   }, [socket, navigate, username]);
 
   const handleStartLoading = async () => {

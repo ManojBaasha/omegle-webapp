@@ -34,7 +34,6 @@ export default function Home() {
     printuserdata();
     // Clean up the socket connection and listeners
     return () => {
-      socket.disconnect();
       socket.off("userdata");
     };
   }, []);
