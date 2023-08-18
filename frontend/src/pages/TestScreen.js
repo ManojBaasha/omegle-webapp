@@ -23,6 +23,8 @@ import "../assets/TestScreen.css";
 import { UserContext } from "../contexts/user.context";
 import socket from "../contexts/socket.js";
 import bird from "../assets/profilepics/bird.png";
+import { ReactSVG } from 'react-svg';
+import send from "../assets/icons/send_.svg";
 
 // Component for the chat screen
 function Test({ conversation }) {
@@ -152,7 +154,7 @@ function Test({ conversation }) {
             onChange={(e) => setNewMessage(e.target.value)}
             className="message-input"
           />
-          <button onClick={handleMessageSend}>Send</button>
+          <img onClick={handleMessageSend} src={send} alt="send" className="message-form-send"/>
         </form>
       </div>
     </div>

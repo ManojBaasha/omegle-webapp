@@ -15,13 +15,13 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 
-app.use(cors("https://omeglebutbetter.web.app"));
+app.use(cors("http://localhost:3000"));
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://omeglebutbetter.web.app",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     autoConnect: false,
   },

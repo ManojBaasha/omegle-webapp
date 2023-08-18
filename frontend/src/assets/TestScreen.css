@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: #141521;
 }
 
 /* Navbar styles */
@@ -41,18 +42,20 @@
   padding: 8px;
   border-radius: 8px;
   margin-bottom: 4px;
+  width: fit-content;
+  max-width: 50%;
 }
 
 .sender-message {
   align-self: flex-end;
-  background: #dff9fb;
-  color: black;
+  background: #C76912;
+  color: #FFF;
 }
 
 .receiver-message {
   align-self: flex-start;
-  background: #f2f2f2;
-  color: black;
+  background: #30323E;
+  color: #FFF;
 }
 
 /* Message form styles */
@@ -61,13 +64,16 @@
   align-items: center;
   padding: 8px;
   flex-grow: 100;
-  background: #f0f0f0;
+  background: rgba(30, 32, 44, 0.24);
   flex-direction: row;
 }
 
 .message-form form {
+  padding-left: 4%;
   display: flex;
   flex-grow: 100;
+  background: rgba(30, 32, 44, 0.24);
+  max-width: 95%;
 }
 
 .message-form input {
@@ -75,13 +81,22 @@
   padding: 4px;
   border-radius: 4px;
   margin-right: 8px;
+  background: #1D1E2B;
+  color: rgba(255, 255, 255, 0.19);
+  border-color: transparent;
 }
 
 .message-form button {
-  background: #00a8ff;
+  background: #C76912;
   color: #fff;
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.message-form-send {
+  padding-left: 2%;
+  align-items: left;
+  margin-right: -4%;
 }
